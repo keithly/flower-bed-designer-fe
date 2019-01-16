@@ -1,24 +1,26 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Axios from 'axios';
 
 class App extends Component {
-  render() {
+    constructor (props) {
+        super(props)
+        this.state = {plants: []}
+    }
+
+    async componentDidMount() {
+      const request = await Axios.get('http://localhost:5000/plant/')
+      console.log(request.data)
+      this.setState({ plants: request.data})
+    }
+
+    render() {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+          {this.state.plants.map(plant => (
+            <h2 key={plant.plant_id}>{plant.common_name}</h2>
+          ))}      
         </header>
       </div>
     );
